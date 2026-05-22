@@ -416,7 +416,7 @@ function Settings(): React.JSX.Element {
     [activeSectionId, mountedSectionIds, navSections, settingsSearchQuery, visibleSectionIds]
   )
   const windowsTerminalCapabilities = useWindowsTerminalCapabilities(
-    isWindows && neededSectionIds.has('terminal')
+    isWindows && (neededSectionIds.has('terminal') || neededSectionIds.has('accounts'))
   )
 
   useEffect(() => {
@@ -745,7 +745,13 @@ function Settings(): React.JSX.Element {
                   searchEntries={getSectionSearchEntries('accounts')}
                 >
                   {isSectionMounted('accounts') ? (
-                    <AccountsPane settings={settings} updateSettings={updateSettings} />
+                    <AccountsPane
+                      settings={settings}
+                      updateSettings={updateSettings}
+                      wslAvailable={windowsTerminalCapabilities.wslAvailable}
+                      wslDistros={windowsTerminalCapabilities.wslDistros}
+                      wslCapabilitiesLoading={windowsTerminalCapabilities.isLoading}
+                    />
                   ) : null}
                 </SettingsSection>
 
@@ -833,6 +839,8 @@ function Settings(): React.JSX.Element {
                       setScrollbackMode={setScrollbackMode}
                       ghostty={ghostty}
                       wslAvailable={windowsTerminalCapabilities.wslAvailable}
+                      wslDistros={windowsTerminalCapabilities.wslDistros}
+                      wslCapabilitiesLoading={windowsTerminalCapabilities.isLoading}
                       pwshAvailable={windowsTerminalCapabilities.pwshAvailable}
                     />
                   ) : null}
